@@ -13,7 +13,7 @@
     "vite": "^5.0.4"
   },
   "dependencies": {
-    "@interaqt/utility": "^0.8.5",
+    "@interaqt/utility": "^0.8.6",
     "@logto/browser": "^2.2.0",
     "axii": "^2.0.0"
   }
