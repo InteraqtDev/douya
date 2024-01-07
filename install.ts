@@ -1,30 +1,24 @@
 import {Controller, MonoSystem, SQLiteDB} from "@interaqt/runtime";
-import {entities, interactions, relations, states, activities} from './app/index.js'
+import {activities, entities, interactions, relations, states} from './app/index.js'
 import {DATABASE_ADDR} from "./config.js";
-import { existsSync, unlinkSync } from "fs";
+import {existsSync, unlinkSync} from "fs";
 import chalk from "chalk";
 import {program} from "commander";
-import { client } from "./logtoClient.js";
+import { recover, install } from "./integration.js";
 
 
-export function mapUserEntity(userEntity: any) {
-    return {
-        id: userEntity.id,
-        name: userEntity.username,
-    }
+type Recovers = {
+    [k:string]: (controller: Controller) => Promise<void>
 }
 
-export async function createInitialData(controller: Controller) {
-    const system = controller.system
-    await client.getToken()
-    const users = await client.getUsers()
-    for(let user of users) {
-        await system.storage.create('User', mapUserEntity(user))
-    }
+type Installs = {
+    [k:string]: (controller: Controller) => Promise<void>
 }
 
-program.option('-f, --force', 'force install')
-    .action(async (options) => {
+program
+    .option('-f, --force', 'force install')
+    .option('-r, --recover [recover...]', 'recover data from sub systems')
+    .action(async (options: {force:boolean, recover:string[]}) => {
         console.log(options)
         try {
             if (existsSync(DATABASE_ADDR)) {
@@ -38,9 +32,24 @@ program.option('-f, --force', 'force install')
             }
             const db = new SQLiteDB(DATABASE_ADDR)
             const system = new MonoSystem(db)
-            const controller = new Controller(system, entities, relations, activities, interactions, states)
+            const controller = new Controller(system, Object.values(entities), Object.values(relations), Object.values(activities), Object.values(interactions), Object.values(states))
             await controller.setup(true)
-            await createInitialData(controller)
+            if (options.recover) {
+                for (let subSystem of options.recover) {
+                    if (subSystem in recover) {
+                        await (recover as Recovers)[subSystem as string](controller)
+                    } else {
+                        console.log(chalk.red(`sub system ${subSystem} not found`))
+                        return
+                    }
+                }
+            }
+
+            // 默认都要 install
+            for(let subSystem in install) {
+                await (install as Installs)[subSystem as string](controller)
+            }
+
 
             console.log("install successfully")
         } catch (e) {

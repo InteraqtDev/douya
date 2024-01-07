@@ -19,6 +19,9 @@ export function Login({}, { createElement }: InjectHandles) {
             <button onclick={() => helper.client.signIn(LOGIN_CALLBACK_ADDR)}>
                 Sign In
             </button>
+            <button onclick={() => helper.client.signOut()}>
+                logout
+            </button>
         </div>
     </div>
 }

@@ -2,22 +2,6 @@ import {sendRequestRelation, userTotalUnhandledRequest} from "./requestEntity.js
 import {friendRelation} from "./createFriendRelationActivity.js";
 import {UserEntity} from "./user.js";
 import {
-    Action,
-    Activity,
-    ActivityGroup,
-    BoolAtomData,
-    createUserRoleAttributive,
-    Entity,
-    Interaction,
-    Payload,
-    PayloadItem,
-    Relation,
-    RelationStateMachine,
-    RelationStateNode,
-    RelationStateTransfer,
-    Transfer,
-    Attributives,
-    Attributive,
     Property,
     RelationBasedEvery,
     RelationBasedAny,

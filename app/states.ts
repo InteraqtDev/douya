@@ -33,8 +33,8 @@ const anyRequestHandledState = State.create({
         }
     })
 })
-export const states = [
+export const states = {
     totalFriendRelationState,
     everyRequestHandledState,
     anyRequestHandledState,
-]
+}

@@ -5,7 +5,8 @@ import {
     deleteInteraction,
     friendRelation,
     rejectInteraction,
-    sendInteraction
+    sendInteraction,
+    approveInteraction
 } from "./createFriendRelationActivity.js";
 import {messageToRequestRelation, receivedRequestRelation, requestEntity, sendRequestRelation} from "./requestEntity.js";
 import {messageEntity} from "./messageEntity.js";
@@ -14,26 +15,27 @@ import {messageEntity} from "./messageEntity.js";
 
 
 // CAUTION 不能直接用 instance ，上面还有系统声明的
-export const entities = [
+export const entities = {
     UserEntity,
     messageEntity,
     requestEntity,
-]
-export const relations = [
+}
+export const relations = {
     friendRelation,
     sendRequestRelation,
     receivedRequestRelation,
     messageToRequestRelation,
-]
-export const activities = [
+}
+export const activities = {
     createFriendRelationActivity
-]
+}
 // CAUTION 这里也要带上所有 activity 的 interactions
-export const interactions = [
+export const interactions = {
     sendInteraction,
     rejectInteraction,
     cancelInteraction,
-    deleteInteraction
-]
+    deleteInteraction,
+    approveInteraction
+}
 
 export { states } from './states.js'
