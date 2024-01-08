@@ -10,7 +10,7 @@
     "force-install": "npm run build && node --experimental-modules --es-module-specifier-resolution=node dist/install.js -f -r logto | pino-pretty",
     "start": "npm run build && node --experimental-modules --es-module-specifier-resolution=node dist/server.js | pino-pretty",
     "istart": "npm run install && npm run start",
-    "dev": "npm run force-install && nodemon --experimental-modules --es-module-specifier-resolution=node dist/server.js | pino-pretty",
+    "dev": "npm run force-install && nodemon --experimental-modules --es-module-specifier-resolution=node dist/server.js --dev | pino-pretty",
     "dashboard": "cd dashboard && npm start",
     "test": "vitest"
   },
@@ -19,7 +19,8 @@
   "dependencies": {
     "@interaqt/runtime": "^0.8.30",
     "@interaqt/utility": "^0.8.4",
-    "jose": "^5.2.0"
+    "jose": "^5.2.0",
+    "minio": "^7.1.3"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.3.1",

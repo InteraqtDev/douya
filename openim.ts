@@ -83,10 +83,10 @@ class APIClient {
 
 export async function install(controller:Controller) {
     // 获取所有用户
-    const client = new APIClient(ENDPOINT, SECRET, ADMIN_ID)
-    const users = await controller.system.storage.find('User', undefined, undefined, ['*'])
-    const result = await client.registerUsers(users)
-    if (result.errCode !== 0) throw new Error(result.errMsg)
+    // const client = new APIClient(ENDPOINT, SECRET, ADMIN_ID)
+    // const users = await controller.system.storage.find('User', undefined, undefined, ['*'])
+    // const result = await client.registerUsers(users)
+    // if (result.errCode !== 0) throw new Error(result.errMsg)
 }
 
 // 1. 交友全控制
