@@ -18,17 +18,18 @@ export function Upload({}, { createElement }: InjectHandles) {
     }
 
     async function retrieveNewURL(file: File) {
-        const resp  = await fetch(`${API_ENDPOINT}/signImage`, {
+        const resp  = await fetch(`${API_ENDPOINT}/signUploadImage`, {
             headers: {
                 'x-user-id': USER_ID,
                 'Content-Type': 'application/json'
             },
             method: 'POST',
             body: JSON.stringify({
-                name: file.name,
-                mime: file.type,
-                size: file.size,
-                bucket: 'images'
+                image: {
+                    name: file.name,
+                    mime: file.type,
+                    size: file.size,
+                }
             })
         })
 

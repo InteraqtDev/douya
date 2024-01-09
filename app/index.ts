@@ -10,7 +10,7 @@ import {
 } from "./createFriendRelationActivity.js";
 import {messageToRequestRelation, receivedRequestRelation, requestEntity, sendRequestRelation} from "./requestEntity.js";
 import {messageEntity} from "./messageEntity.js";
-import { createPostInteraction, updatePostInteraction, postEntity, uploadImageInteraction} from "./post.js";
+import {createPostInteraction, updatePostInteraction, postEntity, uploadImageInteraction, imageEntity} from "./post.js";
 
 
 // CAUTION 不能直接用 instance ，上面还有系统声明的
@@ -19,6 +19,7 @@ export const entities = {
     messageEntity,
     requestEntity,
     postEntity,
+    imageEntity
 }
 export const relations = {
     friendRelation,

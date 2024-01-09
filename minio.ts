@@ -1,12 +1,8 @@
-import {
-    Controller,
-    DataAPIContext,
-    KlassInstance,
-    Interaction, createDataAPI
-} from "@interaqt/runtime"
+import {Controller, DataAPIContext} from "@interaqt/runtime"
+import {createInteractionPreCheckAPI, createWebhookCallbackAPI} from '@interaqt/utility/pattern/server.js'
 // @ts-ignore
-import { Client } from "minio"
-import { interactions} from './app/index.js'
+import {Client} from "minio"
+import {interactions} from './app/index.js'
 import {uploadImageInteraction} from "./app/post.js";
 
 
@@ -37,31 +33,42 @@ export async function install(controller: Controller) {
 }
 
 
-function createPreCheckAPI(interaction: KlassInstance<typeof Interaction, any>, sign?: any) {
-    return createDataAPI(async function(this: Controller, context: DataAPIContext, filemeta: FileMeta) {
-        const interactionCall = this.interactionCallsByName.get(interaction.name)
-        let error:any
-        let signedUrl
-        try {
-            await interactionCall?.checkCondition({user: context.user, payload: {image: filemeta}})
-            if (sign) {
-                signedUrl = await sign.call(this, context,  filemeta)
-            }
-        } catch (e) {
-            error = e
-        }
-        return {
-            signedUrl,
-            error
-        }
-    }, { useNamedParams: true })
+const USER_BUCKET = 'user'
+const signInteractionPayload = function(this: Controller, context: DataAPIContext, filemeta: FileMeta) {
+    const fileNameWithUserId= `${context.user.id}/${filemeta.name}`
+    return minioClient.presignedPutObject(USER_BUCKET, fileNameWithUserId, 24 * 60 * 60)
 }
 
-// TODO  需要考虑初始化的时候让用户自己可以选择创建几个 bucket
-const signImage = function(this: Controller, context: DataAPIContext, filemeta: FileMeta) {
-    return minioClient.presignedPutObject(filemeta.bucket, filemeta.name, 24 * 60 * 60)
+type S3Event = {
+    Key: string,
+    Records: {
+        eventName: string,
+        s3: {
+            bucket: {
+                name: string
+            }
+            object: {
+                key: string,
+                size:number,
+                contentType: string
+            }
+        }
+    }[]
+}
+
+const payloadUploadEventToArgs = function(event: S3Event) {
+    // TODO 暂时只支持一个
+    const record = event.Records[0]
+    const [bucket, userId, fileName] = event.Key.split('/')
+    return {
+        user: {id: userId},
+        // TODO width/height 之类的信息要怎么存，mime 不需要了，有 fileName extension 就可以了
+        //  放到 fileName 里面？
+        payload: {image: {name: fileName, size: record.s3.object.size, mime: record.s3.object.contentType}}
+    }
 }
 
 export const apis = {
-    signImage: createPreCheckAPI(interactions.uploadImageInteraction, signImage)
+    signUploadImage: createInteractionPreCheckAPI(interactions.uploadImageInteraction, signInteractionPayload),
+    uploadImageCallback: createWebhookCallbackAPI(uploadImageInteraction, payloadUploadEventToArgs)
 }

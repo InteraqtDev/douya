@@ -82,7 +82,7 @@ class APIClient {
 
 
 export async function install(controller:Controller) {
-    // 获取所有用户
+    // TODO 获取所有用户
     // const client = new APIClient(ENDPOINT, SECRET, ADMIN_ID)
     // const users = await controller.system.storage.find('User', undefined, undefined, ['*'])
     // const result = await client.registerUsers(users)
@@ -116,7 +116,6 @@ export const fullControl = {
                 const client = new APIClient(ENDPOINT, SECRET, ADMIN_ID)
                 let result
                 if(mutationEvent.type === 'create') {
-                    // TODO 这是对的吗？ record.source 上有  id 吗？
                     result = await client.addFriendRelation(mutationEvent.record!.source.id, mutationEvent.record!.target.id)
                 } else  if (mutationEvent.type ==='delete') {
                     result = await client.deleteFriendRelation(mutationEvent.record!.source.id, mutationEvent.record!.target.id)

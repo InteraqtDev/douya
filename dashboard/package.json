@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@interaqt/shared": "^1.0.18",
+    "@interaqt/shared": "^1.0.25",
     "animate.css": "^4.1.1",
     "axii": "^2.0.4",
     "monaco-editor": "^0.45.0",

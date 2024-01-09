@@ -17,8 +17,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@interaqt/runtime": "^0.8.30",
-    "@interaqt/utility": "^0.8.4",
+    "@interaqt/runtime": "^0.8.33",
+    "@interaqt/utility": "^0.8.7",
     "jose": "^5.2.0",
     "minio": "^7.1.3"
   },
