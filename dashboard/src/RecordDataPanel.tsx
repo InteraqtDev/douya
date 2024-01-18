@@ -56,8 +56,13 @@ export default function RecordDataPanel({ record = atom(''), map = atom<MapData|
         sending(true)
         try {
             const newValue = editorRef()?.getValue()
-
-            result(await post(`/api/createRecord`, [record(), JSON.parse(newValue)], xUserId().toString()))
+            const currentRecord = map()?.records[record()]!
+            if (currentRecord.isRelation) {
+                const newRelation = JSON.parse(newValue)
+                result(await post(`/api/createRelation`, [record(), newRelation.source.id, newRelation.target.id, newRelation], xUserId().toString()));
+            } else {
+                result(await post(`/api/createRecord`, [record(), JSON.parse(newValue)], xUserId().toString()))
+            }
         } catch (e) {
             error(e)
         }

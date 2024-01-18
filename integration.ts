@@ -14,7 +14,8 @@ export const install = {
 
 export const apis = {
     ...logto.apis,
-    ...minio.apis
+    ...minio.apis,
+    ...openim.apis
 }
 
 export const sideEffects = {

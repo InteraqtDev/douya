@@ -11,7 +11,7 @@ export function App({}, { createElement }: InjectHandles) {
 
     const payload = {
         to: {
-            id: 'sdjy4ayjqzdb',
+            id: 'h4eqq7niohkp',
         },
         request:{
             reason: 'let use make friend'
@@ -28,6 +28,23 @@ export function App({}, { createElement }: InjectHandles) {
     }
 
 
+    const acceptRequest = async () => {
+        const res = await fetch(helper.interactionAddr, {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-user-id': 'h4eqq7niohkp',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                activityId: activityId(),
+                activity: 'createFriendRelation',
+                interaction: 'approve',
+                payload: {
+                }
+            })
+        })
+    }
+
     return <div className="h-full">
         <div className="lg:ml-full-menu sm:ml-mini-menu flex flex-col h-full">
             <div>
@@ -35,6 +52,9 @@ export function App({}, { createElement }: InjectHandles) {
             </div>
             <button onclick={sendRequestToUser2}>
                 send request to user 2
+            </button>
+            <button onclick={acceptRequest}>
+                accept request
             </button>
         </div>
     </div>

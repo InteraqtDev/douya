@@ -10,13 +10,16 @@
   "license": "ISC",
   "devDependencies": {
     "typescript": "^5.3.2",
-    "vite": "^5.0.4"
+    "vite": "^5.0.4",
+    "worker-loader": "^3.0.8",
+    "worker-plugin": "^5.0.1"
   },
   "dependencies": {
     "@interaqt/utility": "^0.8.6",
     "@logto/browser": "^2.2.0",
     "autoprefixer": "^10.4.16",
-    "axii": "^2.0.4",
+    "axii": "^2.0.12",
+    "open-im-sdk-wasm": "^3.5.1-alpha.6",
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1"
   }

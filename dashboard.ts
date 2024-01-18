@@ -37,6 +37,9 @@ export function createDashboardAPIs(apis: {[k:string]: DataAPI }) {
         createRecord: createDataAPI(function createRecord(this: Controller, context: DataAPIContext, recordName:string, newData: any) {
         return this.system.storage.create(recordName, newData)
     }, { allowAnonymous: true, params: ['string', 'object'] }),
+        createRelation: createDataAPI(function createRecord(this: Controller, context: DataAPIContext, recordName:string, sourceId: string, targetId: string, data:any) {
+            return this.system.storage.addRelationByNameById(recordName, sourceId, targetId, data)
+        }, { allowAnonymous: true, params: ['string', 'string', 'string', 'object'] }),
 
     }
 }

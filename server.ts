@@ -39,6 +39,11 @@ program.option('-d, --dev', 'dev mode')
         }
 
         startServer(controller, {
+            cors: {
+              origin: true
+            },
+            // 监听内网 Ip
+            host: '0.0.0.0',
             port: PORT,
             parseUserId: async (headers: IncomingHttpHeaders) => {
                 if (options.dev && headers['x-user-id']) return headers['x-user-id'] as string

@@ -1,4 +1,4 @@
-import {Controller, RecordMutationEvent, RecordMutationSideEffect} from "@interaqt/runtime";
+import {Controller, createDataAPI, RecordMutationEvent, RecordMutationSideEffect} from "@interaqt/runtime";
 import { relations, entities } from './app/index.js'
 
 const ENDPOINT = 'http://192.168.31.150:10002';
@@ -26,6 +26,21 @@ class APIClient {
             })
         })).json()
         this.token = resp.data.token
+    }
+    async getUserToken(userId: string, platformId: number) {
+        return await (await fetch(ENDPOINT + '/auth/user_token', {
+            method: 'POST',
+            headers: {
+                'operationID': Date.now().toString(),
+                'Content-Type': 'application/json',
+                'Authorization': this.secret
+            },
+            body: JSON.stringify({
+                "secret": this.secret,
+                "userID": userId,
+                "platformId": platformId
+            })
+        })).json()
     }
     async registerUsers(users: any[]) {
         return (await fetch(ENDPOINT + '/user/user_register', {
@@ -133,3 +148,13 @@ export const sideEffects = [
 
 
 // TODO 2. 聊天室 全控制
+
+
+// apis
+export const apis = {
+    getUserToken: createDataAPI(async function(this: Controller, context, params: any) {
+        const client = new APIClient(ENDPOINT, SECRET, ADMIN_ID)
+        return await client.getUserToken(context.user.id, params.platformId)
+    }, { useNamedParams: true, })
+
+}
