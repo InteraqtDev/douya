@@ -2,9 +2,9 @@ import {InjectHandles, atom} from "axii";
 
 
 /* @jsx createElement*/
-export function MessageInput({text = atom(''), onSend}, {createElement}: InjectHandles) {
+export function MessageInput({text = atom<string>(''), onSend = () => {}}, {createElement}: InjectHandles) {
     return (
-        <div class="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
+        <div class="border-t-2 border-gray-200 px-4 p-4 mb-2 sm:mb-0">
             <div class="relative flex">
          <span class="absolute inset-y-0 flex items-center">
             <button type="button"

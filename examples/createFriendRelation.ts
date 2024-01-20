@@ -19,7 +19,7 @@ import {
     createUserRoleAttributive,
     Entity,
     Every,
-    Interaction,
+    Interaction, InteractionEventArgs,
     MapActivity,
     MapActivityItem,
     MapInteraction,
@@ -232,10 +232,10 @@ const deleteFriendTransfer = RelationStateTransfer.create({
     fromState: isFriendState,
     toState: notFriendState,
     handleType: 'computeSource',
-    handle: async function (eventArgs, activityId) {
+    handle: async function (eventArgs:InteractionEventArgs) {
         return {
             source: eventArgs.user,
-            target: eventArgs.payload.target
+            target: eventArgs.payload!.target
         }
     }
 

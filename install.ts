@@ -5,6 +5,7 @@ import {existsSync, unlinkSync} from "fs";
 import chalk from "chalk";
 import {program} from "commander";
 import { recover, install } from "./integration.js";
+import {  install as installData } from "./data.js";
 
 
 type Recovers = {
@@ -50,6 +51,7 @@ program
                 await (install as Installs)[subSystem as string](controller)
             }
 
+            await installData(controller)
 
             console.log("install successfully")
         } catch (e) {

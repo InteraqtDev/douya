@@ -5,8 +5,14 @@ import {
     Property,
     RelationBasedEvery,
     RelationBasedAny,
-    RelationCount
+    RelationCount,
+    Interaction,
+    GetAction,
+    DataAttributive, InteractionEventArgs,
+    boolExpToDataAttributives,
+    BoolExp
 } from "@interaqt/runtime";
+import {postEntity} from "./post.js";
 
 UserEntity.properties.push(Property.create({
     name: 'totalUnhandledRequest',
@@ -50,3 +56,21 @@ UserEntity.properties.push(Property.create({
     collection: false,
     computedData: userTotalFriendCount
 }))
+
+
+const MyFriend = DataAttributive.create({
+    name: 'MyFriend',
+    content: (event: InteractionEventArgs) => {
+        return {
+            key: 'friends.id',
+            value: ['=', event.user.id]
+        }
+    }
+})
+
+export const getFriendsInteraction = Interaction.create({
+    name: 'getFriends',
+    action: GetAction,
+    data: UserEntity,
+    dataAttributives: MyFriend,
+})

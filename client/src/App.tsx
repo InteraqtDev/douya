@@ -1,10 +1,9 @@
-import {atom} from 'axii'
+import {atom, RenderContext} from 'axii'
 
 import {helper} from '../logtoHelper.js';
-import {InjectHandles} from "../global";
 
 /* @jsx createElement */
-export function App({}, { createElement }: InjectHandles) {
+export function App({}, { createElement }: RenderContext) {
 
     const activityId = atom<string>('')
 
@@ -43,6 +42,7 @@ export function App({}, { createElement }: InjectHandles) {
                 }
             })
         })
+        console.log(res)
     }
 
     return <div className="h-full">

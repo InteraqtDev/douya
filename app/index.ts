@@ -8,13 +8,29 @@ import {
     sendInteraction,
     approveInteraction
 } from "./createFriendRelationActivity.js";
-import {messageToRequestRelation, receivedRequestRelation, requestEntity, sendRequestRelation} from "./requestEntity.js";
+import {
+    messageToRequestRelation,
+    receivedRequestRelation,
+    requestEntity,
+    sendRequestRelation
+} from "./requestEntity.js";
 import {messageEntity} from "./messageEntity.js";
-import {createPostInteraction, updatePostInteraction, postEntity, uploadImageInteraction, imageEntity} from "./post.js";
+import {
+    createPostInteraction,
+    updatePostInteraction,
+    postEntity,
+    uploadImageInteraction,
+    imageEntity,
+    postImageRelation,
+    getPostsInteraction,
+    postOwnerRelation
+} from "./post.js";
+import {getFriendsInteraction} from "./friend.js";
 
 
 // CAUTION 不能直接用 instance ，上面还有系统声明的
 export const entities = {
+// @ts-ignore
     UserEntity,
     messageEntity,
     requestEntity,
@@ -26,6 +42,8 @@ export const relations = {
     sendRequestRelation,
     receivedRequestRelation,
     messageToRequestRelation,
+    postImageRelation,
+    postOwnerRelation
 }
 export const activities = {
     createFriendRelationActivity
@@ -39,7 +57,9 @@ export const interactions = {
     approveInteraction,
     createPostInteraction,
     updatePostInteraction,
-    uploadImageInteraction
+    uploadImageInteraction,
+    getPostsInteraction,
+    getFriendsInteraction
 }
 
 export { states } from './states.js'

@@ -1,22 +1,25 @@
 import {
     Action,
+    BoolExp,
+    boolExpToConditions,
+    Condition,
+    Controller,
     Entity,
     Interaction,
+    InteractionEventArgs,
     MapInteraction,
     MapInteractionItem,
-    MapRecordMutation,
     Payload,
     PayloadItem,
     Property,
     PropertyTypes,
     Relation,
-    Condition, InteractionEventArgs,
-    boolExpToConditions,
-    BoolExp,
+    GetAction
 } from "@interaqt/runtime";
-import {Controller, RecordMutationEvent} from "@interaqt/runtime";
+import {UserEntity} from "./user.js";
 
 
+// @ts-ignore
 export const imageEntity = Entity.create({
     name: 'Image',
     properties: [
@@ -59,7 +62,10 @@ export const uploadImageInteraction = Interaction.create({
 })
 
 
-export const postEntity = Entity.create({ name: 'Post' })
+export const postEntity = Entity.create({
+    name: 'Post',
+})
+
 
 export const createPostInteraction = Interaction.create({
     name: 'createPost',
@@ -97,7 +103,20 @@ export const updatePostInteraction = Interaction.create({
 
 
 postEntity.properties.push(
-    Property.create({ name: 'title', type: PropertyTypes.String }),
+    Property.create({
+        name: 'title', type: PropertyTypes.String,
+        computedData: MapInteraction.create({
+            items: [
+                MapInteractionItem.create({
+                    interaction: createPostInteraction,
+                    map: (event) => { return event.payload.post.title },
+                    computeTarget: async function (this: Controller, event) {
+                        return event.payload.post.id
+                    }
+                }),
+            ]
+        })
+    }),
     Property.create({
         name: 'content',
         type: PropertyTypes.String,
@@ -116,7 +135,55 @@ postEntity.properties.push(
 )
 
 
+export const postImageRelation = Relation.create({
+    source: postEntity,
+    sourceProperty: 'images',
+    target: imageEntity,
+    targetProperty: 'post',
+    relType: '1:n',
+    properties: [],
+    computedData: MapInteraction.create({
+        items: [
+            MapInteractionItem.create({
+                interaction: createPostInteraction,
+                map: (event) => {
+                    return event.payload.images?.map((image: any) => ({
+                        source: { id: event.payload.post.id },
+                        target: { id: image.id }
+                    }))
+                },
+            }),
+        ]
+    })
+})
 
+
+export const postOwnerRelation = Relation.create({
+    source: UserEntity,
+    sourceProperty: 'posts',
+    target: postEntity,
+    targetProperty: 'owner',
+    relType: '1:n',
+    computedData: MapInteraction.create({
+        items: [
+            MapInteractionItem.create({
+                interaction: createPostInteraction,
+                map: (event) => {
+                    return {
+                        source: { id: event.user.id },
+                        target: { id: event.payload.post.id }
+                    }
+                },
+            }),
+        ]
+    }),
+})
+
+export const getPostsInteraction = Interaction.create({
+    name: 'getPosts',
+    action: GetAction,
+    data: postEntity
+})
 
 // revision 的实现
 // export const postRevisionEntity = Entity.create({

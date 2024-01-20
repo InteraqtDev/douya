@@ -28,8 +28,6 @@ type FileMeta = {
 }
 
 export async function install(controller: Controller) {
-    const result = await minioClient.presignedPutObject('images', 'test.svg', 24 * 60 * 60)
-    console.log(result)
 }
 
 
